@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue做tab切换</title>
+    <style>
+        *{
+            padding:0;
+            margin:0;
+        }
+        .tab{
+            width: 400px;
+            height: 400px;
+            margin:30px auto;
+            border:1px solid #ccc;
+            overflow:hidden;
+        }
+        .tab ul{
+            display:-webkit-flex;
+            border-bottom:1px solid #ccc;
+            list-style:none;
+        }
+        .tab ul li{
+            -webkit-flex:1;
+            line-height:50px;
+            text-align:center;
+            background:pink;
+            color:#fff;
+            font-weight:bold;
+        }
+        .bottom{
+            height: 350px;
+        }
+        .bottom div{
+            width: 400px;
+            height: 350px;
+        }
+        .bottom div:nth-child(1){
+             background:orange;
+         }
+        .bottom div:nth-child(2){
+             background:lawngreen;
+         }
+        .bottom div:nth-child(3){
+             background:orangered;
+         }
+        .bottom div:nth-child(4){
+             background:sandybrown;
+         }
+        .tab ul li.active{
+            background:skyblue;
+            color:pink;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <tab :styles="style1"></tab>
+    </div>
+ 
+    <template id="tabs">
+        {{mag}}
+        <div class="tab">
+            <ul>
+                <li v-for="(index,tit) in title" @click="change(index)">{{tit}}</li>
+            </ul>
+            <div class="bottom">
+                <div v-for="con in content">{{con}}</div>
+            </div>
+        </div>
+    </template>
+    <script type="text/javascript" src="./js/vue.min.js"></script>
+    <script type="text/javascript">
+        //Vue的全局组件
+        Vue.component("tab",{
+            template:"#tabs",
+            //接数据
+            props:["styles"],
+            data:function () {
+                return {
+                    name:"component",
+                    active:"",
+                    title:["麦田","水稻","房屋","自然"],
+                    content:["麦田","水稻","房屋","自然"]
+                }
+            },
+            methods:{
+                change:function($index){
+                    let uLis = document.querySelectorAll("ul>li");
+                    let imgs = document.querySelectorAll('.bottom>div');
+                    [...uLis].map((item,index) => {
+                        //判断点击时候的index和数组的index是否相等
+                        if(index == $index){
+                            item.className = 'active';
+                            imgs[index].style.display = 'block';
+                        }else{
+                            item.className = '';
+                            imgs[index].style.display = 'none';
+                        }
+                    })
+                }
+            }
+        });
+        //实例化Vue
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                mag:"tab切换"
+            },
+        });
+    </script>
+</body>
+</html>
